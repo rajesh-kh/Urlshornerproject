@@ -1,77 +1,91 @@
-<<<<<<< HEAD
-# Urlshornerproject
-=======
-# Sembark URL Shortener
+# Sembark Project — Local Setup & Testing
 
-Setup instructions to run the project locally (MySQL + Laravel 12):
+This repository contains a Laravel-based URL shortener app with role-based dashboards (SuperAdmin, Admin, Member), company support, CSV export, and hit tracking.
 
-- Copy `.env.example` to `.env` and set your MySQL credentials and DB name.
-- Run composer install.
-- Generate app key: `php artisan key:generate`.
-- Run migrations: `php artisan migrate`.
-- Run seeders: `php artisan db:seed` (creates `SuperAdmin` via raw SQL).
-- Run tests: `php artisan test`.
+Follow these steps to set up and run the project locally for development and testing.
 
-Routes added:
-- `POST /short-urls` (create) — allowed for `Sales` and `Manager` roles only.
-- `GET /short-urls` (list) — role-specific lists per requirements.
-- `GET /s/{slug}` — resolve redirect; not publicly resolvable (requires auth).
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Prerequisites
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+- PHP 8.1+ (8.3 recommended)
+- Composer
+- MySQL
+- Git
 
-## About Laravel
-
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Clone
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone <your-repo-url> sembark_project
+cd sembark_project
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Environment
 
-## Contributing
+Copy the example environment and update DB credentials:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+cp .env.example .env
+# Edit .env and set DB, MAIL and other values
+```
 
-## Code of Conduct
+Minimum `.env` settings to update:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`
+- `APP_URL` (e.g. http://localhost:8000)
 
-## Security Vulnerabilities
+## Install PHP dependencies
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+composer install
+```
 
-## License
+Generate app key and link storage:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
->>>>>>> 566ee4d (Initial commit)
+```bash
+php artisan key:generate
+php artisan storage:link
+```
+
+## Database: Migrate & Seed
+
+Create the database (in MySQL) and then run migrations and seeders:
+
+```bash
+php artisan migrate --seed
+```
+
+If you only want migrations (no seed):
+
+```bash
+php artisan migrate
+```
+
+## Run the app
+
+Start the PHP built-in server:
+
+```bash
+php artisan serve --host=127.0.0.1 --port=8000
+# then open http://127.0.0.1:8000
+```
+
+If you use Laragon, Valet, Homestead, or Docker, start your environment and point your browser at the configured URL.
+
+## Tests
+
+Run PHPUnit tests:
+
+```bash
+php artisan test or php artisan test --filter ShortUrlTest
+```
+
+You can run a specific test file or test name via PHPUnit options.
+
+## Seeded data Details
+
+- Login Details
+
+```bash
+span
+```
+
+- Password for every user is "password"

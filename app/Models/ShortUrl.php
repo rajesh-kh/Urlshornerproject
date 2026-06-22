@@ -11,6 +11,10 @@ class ShortUrl extends Model
 
     protected $fillable = ['slug', 'original_url', 'company_id', 'created_by'];
 
+    protected $casts = [
+        'hits' => 'integer',
+    ];
+
     public function company()
     {
         return $this->belongsTo(Company::class);

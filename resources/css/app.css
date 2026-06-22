@@ -1,9 +1,34 @@
-@import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
+/* Basic button utilities (fallback, applied directly since Tailwind build may not run) */
+.btn { display:inline-block; font-size:0.875rem; font-weight:500; padding:6px 10px; border-radius:6px; text-decoration:none; cursor:pointer; }
+.btn-primary { background:#f53003; color:#fff; border:1px solid #d43b2f; }
+.btn-outline { background:#fff; color:#111827; border:1px solid #d1d5db; }
+.dt-btn, .btn-dt { border:1px solid #d1d5db; padding:6px 10px; border-radius:6px; background:#fff; font-size:0.875rem; }
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+/* Table tweaks fallback */
+#shortUrlsTable thead th { text-align:left; font-size:0.875rem; font-weight:600; color:#374151; background:#f9fafb; }
+#shortUrlsTable tbody td { font-size:0.875rem; color:#111827; vertical-align:top }
+
+/* Truncate long URLs visually */
+.break-words { word-break: break-word; }
+.max-w-xl { max-width: 40rem; }
+
+@media (max-width: 640px) {
+	.btn { display:block; width:100%; text-align:center }
+	.btn + .btn { margin-top:0.5rem }
 }
+
+/* Small utility fallbacks used in blades (when Tailwind is not built) */
+.flex { display:flex; }
+.items-center { align-items:center; }
+.justify-between { justify-content:space-between; }
+.ml-auto { margin-left:auto !important; }
+.ms-3 { margin-left:0.75rem; }
+.gap-2 { gap:0.5rem; }
+.gap-3 { gap:0.75rem; }
+.mb-3 { margin-bottom:0.75rem; }
+.mb-4 { margin-bottom:1rem; }
+.text-sm { font-size:0.875rem; }
