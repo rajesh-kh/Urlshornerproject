@@ -43,12 +43,7 @@ class ShortUrlController extends Controller
             return response()->json($short, 201);
         }
 
-        // Redirect admins to dashboard listing, others to short-urls list
-        if ($user->hasRole('Admin')) {
-            return redirect('/dashboard')->with('success', 'Short URL created.');
-        }
-
-        return redirect('/short-urls')->with('success', 'Short URL created.');
+        return redirect('/dashboard')->with('success', 'Short URL created.');
     }
 
     public function resolve($slug, Request $request)
