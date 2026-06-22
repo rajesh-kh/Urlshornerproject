@@ -155,36 +155,13 @@
         </div>
     </div>
 
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/vanilla-datatables@1.8.3/dist/vanilla-dataTables.min.css">
-
-    <script src="https://cdn.jsdelivr.net/npm/vanilla-datatables@1.8.3/dist/vanilla-dataTables.min.js"></script>
-
+    <!-- Vanilla-DataTables (same pattern as Member dashboard) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-datatables@latest/dist/vanilla-dataTables.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-datatables@latest/dist/vanilla-dataTables.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            try {
-                if (document.querySelector('#admin-generated-table')) {
-                    new DataTable('#admin-generated-table', {
-                        perPage: 25,
-                        searchable: true,
-                        sortable: true
-                    });
-                }
-            } catch (e) {
-                console.error(e);
-            }
-
-            try {
-                if (document.querySelector('#admin-members-table')) {
-                    new DataTable('#admin-members-table', {
-                        perPage: 25,
-                        searchable: true,
-                        sortable: true
-                    });
-                }
-            } catch (e) {
-                console.error(e);
-            }
+            try{ if(document.querySelector('#admin-generated-table')) new DataTable('#admin-generated-table', { perPage:25, searchable:true, sortable:true }); }catch(e){console.error(e)}
+            try{ if(document.querySelector('#admin-members-table')) new DataTable('#admin-members-table', { perPage:25, searchable:true, sortable:true }); }catch(e){console.error(e)}
         });
     </script>
 </x-app-layout>

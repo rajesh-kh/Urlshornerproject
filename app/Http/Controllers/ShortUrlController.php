@@ -50,8 +50,8 @@ class ShortUrlController extends Controller
     {
         $user = $request->user();
 
-        // Only SuperAdmin is not allowed to create short URLs here
-        if ($user->hasRole('SuperAdmin')) {
+        // Only Sales and Manager roles are allowed to create short URLs
+        if (! $user->hasRole('Sales') && ! $user->hasRole('Manager')) {
             if ($request->wantsJson()) {
                 return response()->json(['message' => 'Forbidden'], 403);
             }
