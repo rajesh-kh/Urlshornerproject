@@ -9,38 +9,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ShortUrlController extends Controller
 {
-    public function index(Request $request)
-    {
-        $user = $request->user();
-
-        if ($user->hasRole('Admin')) {
-            // Admins see URLs for their company
-            $list = ShortUrl::where('company_id', $user->company_id)->get();
-        } elseif ($user->hasRole('Member')) {
-            // Members see URLs they created
-            $list = ShortUrl::where('created_by', $user->id)->get();
-        } elseif ($user->hasRole('SuperAdmin')) {
-            $list = collect(); // SuperAdmin cannot see all
-        } else {
-            // Sales, Manager and others: show their company urls
-            $list = ShortUrl::where('company_id', $user->company_id)->get();
-        }
-
-        // search
-        $q = $request->query('q');
-        if ($q) {
-            $list = $list->filter(function ($item) use ($q) {
-                return str_contains($item->original_url, $q) || str_contains($item->slug, $q);
-            })->values();
-        }
-
-        if ($request->wantsJson()) {
-            return response()->json($list);
-        }
-
-        return view('short_urls.index', ['shortUrls' => $list, 'q' => $q]);
-    }
-
     public function create(Request $request)
     {
         return view('short_urls.create');
@@ -50,8 +18,8 @@ class ShortUrlController extends Controller
     {
         $user = $request->user();
 
-        // Only Sales and Manager roles are allowed to create short URLs
-        if (! $user->hasRole('Sales') && ! $user->hasRole('Manager')) {
+        // Allow Sales, Manager, Admin and Member roles to create short URLs
+        if (! $user->hasRole('Sales') && ! $user->hasRole('Manager') && ! $user->hasRole('Admin') && ! $user->hasRole('Member')) {
             if ($request->wantsJson()) {
                 return response()->json(['message' => 'Forbidden'], 403);
             }
@@ -75,6 +43,11 @@ class ShortUrlController extends Controller
             return response()->json($short, 201);
         }
 
+        // Redirect admins to dashboard listing, others to short-urls list
+        if ($user->hasRole('Admin')) {
+            return redirect('/dashboard')->with('success', 'Short URL created.');
+        }
+
         return redirect('/short-urls')->with('success', 'Short URL created.');
     }
 
@@ -96,26 +69,6 @@ class ShortUrlController extends Controller
         }
 
         return redirect()->away($short->original_url);
-    }
-
-    public function show($id, Request $request)
-    {
-        $short = ShortUrl::findOrFail($id);
-        return view('short_urls.show', ['short' => $short]);
-    }
-
-    public function destroy($id, Request $request)
-    {
-        $user = $request->user();
-        $short = ShortUrl::findOrFail($id);
-
-        // only creator, managers or sales from same company can delete
-        if ($short->created_by !== $user->id && $user->company_id !== $short->company_id) {
-            return redirect()->back()->with('error', 'Not allowed');
-        }
-
-        $short->delete();
-        return redirect('/short-urls')->with('success', 'Deleted');
     }
 
     public function download(Request $request)
