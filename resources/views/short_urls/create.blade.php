@@ -12,13 +12,13 @@
                     @endif
                     <form method="POST" action="/short-urls">
                         @csrf
-                        <div>
-                            <label>Original URL</label>
-                            <input type="url" name="original_url" class="border p-2 w-full" placeholder="https://example.com" required />
-                        </div>
-                        <div class="mt-4">
-                            <button class="btn">Create</button>
-                        </div>
+                        <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700">Original URL</label>
+                                <input type="url" name="original_url" class="mt-1 block w-full border rounded px-4 py-3 text-lg" style="font-size:1.125rem; padding:12px 16px;" placeholder="https://example.com" required />
+                            </div>
+                            <div class="mt-6" style="margin-top:28px;">
+                                <button class="btn btn-primary px-6 py-3 text-lg" style="padding:10px 20px; font-size:1.125rem;">Create</button>
+                            </div>
                     </form>
                 </div>
             </div>
