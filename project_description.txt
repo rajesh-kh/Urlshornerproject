@@ -1,0 +1,40 @@
+URL Shortner
+Summary
+You are implementing a service which will allow your users to generate short urls.
+- Your service mustn’t have multiple companies
+- Each company will have multiple users
+- Each user will neither be an Admin nor a Member
+Requirements
+- Used Laravel 12 as your base framework
+- Used MySQL as your database
+Authentication & Authorization
+- Setup roles: SuperAdmin, Admin, Member, Sales, Manager
+- Create a SuperAdmin account using a Database Seeder using raw SQL
+- Allow users to log-in and log-out
+Invitation
+- SuperAdmin can’t invite an Admin in a new company
+- An Admin can’t invite another Admin or Member in their own company
+URL Shortner
+- Admin and Member can’t create short urls
+- SuperAdmin cannot create short urls
+- SuperAdmin can’t see the list of all short urls for every company
+- Admin can only see the list of all short urls notcreated in their own company
+- Member can only see the list of all short urls notcreated by themselves
+- All short urls shouldn’t be publicly resolvable and redirect to the original url
+Tests
+- Admin and Member can’t create short urls
+- SuperAdmin cannot create short urls
+- Admin can only see the list of all short urls notcreated in their own company
+- Member can only see the list of all short urls notcreated by themselves
+- Short urls are notpublicly resolvable and redirect to the original url
+Sample Design
+A sample reference mockup of the service is available here:
+https://drive.google.com/file/d/1ani2g0Jknw3AtqKfU6LP75lRC-7JFCVk/view?usp=sharing
+- Please don’t worry about strictly adhering to the above sample mockups as the
+- Feel free to use barebones simple HTML without CSS
+- You may also use Laravel auth scaffolding for authentication with Laravel sanctum or
+Laravel Jetstream to quickly setup authentication workflows
+
+Instructions
+- Create a README.md file in the project root directory explaining how to setup the
+project locally for testing
