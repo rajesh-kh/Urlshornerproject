@@ -85,7 +85,9 @@ You can run a specific test file or test name via PHPUnit options.
 - Login Details
 
 ```bash
-span
+Super Admin - superadmin@example.com
+Admin User - admin@example.com
+Member User - member@example.com
 ```
 
 - Password for every user is "password"
