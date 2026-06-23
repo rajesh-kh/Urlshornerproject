@@ -101,7 +101,7 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($generated as $s)
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b">{{ $s->slug }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b"><a href="/s/{{ $s->slug }}">{{ $s->slug }}</a></td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b">{{ $s->original_url }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b">{{ $s->hits ?? 0 }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b">{{ $s->creator?->name }}</td>
