@@ -83,6 +83,7 @@ You can run a specific test file or test name via PHPUnit options.
 ## Seeded data Details
 
 - Login Details
+- First Seed Data - php artisan db:seed
 
 ```bash
 Super Admin - superadmin@example.com
