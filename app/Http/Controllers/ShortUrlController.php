@@ -46,6 +46,27 @@ class ShortUrlController extends Controller
         return redirect('/dashboard')->with('success', 'Short URL created.');
     }
 
+    public function index(Request $request)
+    {
+        $user = $request->user();
+
+        if ($user->hasRole('SuperAdmin')) {
+            // SuperAdmin: see everything
+            $list = ShortUrl::all();
+        } elseif ($user->hasRole('Admin')) {
+            // Admin: only see short URLs for their own company
+            $list = ShortUrl::where('company_id', $user->company_id)->get();
+        } elseif ($user->hasRole('Member')) {
+            // Member: only see short URLs created by themselves
+            $list = ShortUrl::where('created_by', $user->id)->get();
+        } else {
+            // Default: empty collection
+            $list = collect();
+        }
+
+        return response()->json($list);
+    }
+
     public function resolve($slug, Request $request)
     {
         $user = $request->user();

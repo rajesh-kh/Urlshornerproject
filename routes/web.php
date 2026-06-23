@@ -117,6 +117,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     // Short URL UI
+    Route::get('/short-urls', [\App\Http\Controllers\ShortUrlController::class, 'index']);
     Route::get('/short-urls/create', [\App\Http\Controllers\ShortUrlController::class, 'create']);
     Route::post('/short-urls', [\App\Http\Controllers\ShortUrlController::class, 'store'])->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
     Route::get('/short-urls/download', [\App\Http\Controllers\ShortUrlController::class, 'download']);

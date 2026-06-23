@@ -19,25 +19,29 @@ class ShortUrlTest extends TestCase
         // seed roles
         collect(['SuperAdmin','Admin','Member','Sales','Manager'])->each(fn($r) => Role::create(['name'=>$r]));
     }
-
-    public function test_admin_cannot_create_short_url()
+    public function test_admin_and_member_can_create_short_urls()
     {
-        $role = Role::where('name', 'Admin')->first();
-        $user = User::factory()->create();
-        $user->roles()->attach($role);
+        // Admin
+        $adminRole = Role::where('name', 'Admin')->first();
+        $admin = User::factory()->create();
+        $admin->roles()->attach($adminRole);
 
-        $resp = $this->actingAs($user)->postJson('/short-urls', ['original_url' => 'https://example.com']);
-        $resp->assertStatus(403);
-    }
+        $resp = $this->actingAs($admin)->postJson('/short-urls', ['original_url' => 'https://example.com']);
+        $resp->assertStatus(201);
+        $this->assertDatabaseCount('short_urls', 1);
 
-    public function test_member_cannot_create_short_url()
-    {
-        $role = Role::where('name', 'Member')->first();
-        $user = User::factory()->create();
-        $user->roles()->attach($role);
+        // reset DB for member test
+        $this->artisan('migrate:fresh');
+        collect(['SuperAdmin','Admin','Member','Sales','Manager'])->each(fn($r) => Role::create(['name'=>$r]));
 
-        $resp = $this->actingAs($user)->postJson('/short-urls', ['original_url' => 'https://example.com']);
-        $resp->assertStatus(403);
+        // Member
+        $memberRole = Role::where('name', 'Member')->first();
+        $member = User::factory()->create();
+        $member->roles()->attach($memberRole);
+
+        $resp = $this->actingAs($member)->postJson('/short-urls', ['original_url' => 'https://example.com']);
+        $resp->assertStatus(201);
+        $this->assertDatabaseCount('short_urls', 1);
     }
 
     public function test_superadmin_cannot_create_short_url()
@@ -50,18 +54,28 @@ class ShortUrlTest extends TestCase
         $resp->assertStatus(403);
     }
 
-    public function test_sales_can_create_short_url()
+    public function test_superadmin_sees_all_short_urls()
     {
-        $role = Role::where('name', 'Sales')->first();
+        $role = Role::where('name', 'SuperAdmin')->first();
         $user = User::factory()->create();
         $user->roles()->attach($role);
 
-        $resp = $this->actingAs($user)->postJson('/short-urls', ['original_url' => 'https://example.com']);
-        $resp->assertStatus(201);
-        $this->assertDatabaseCount('short_urls', 1);
+        $c1 = Company::create(['name' => 'One']);
+        $c2 = Company::create(['name' => 'Two']);
+
+        $u1 = User::factory()->create(['company_id' => $c1->id]);
+        $u2 = User::factory()->create(['company_id' => $c2->id]);
+
+        ShortUrl::create(['slug'=>'a','original_url'=>'https://a.test','company_id'=>$c1->id,'created_by'=>$u1->id]);
+        ShortUrl::create(['slug'=>'b','original_url'=>'https://b.test','company_id'=>$c2->id,'created_by'=>$u2->id]);
+
+        $resp = $this->actingAs($user)->getJson('/short-urls');
+        $resp->assertStatus(200);
+        $data = $resp->json();
+        $this->assertCount(2, $data);
     }
 
-    public function test_admin_index_sees_non_company_urls()
+    public function test_admin_sees_company_short_urls_only()
     {
         $adminRole = Role::where('name','Admin')->first();
         $company1 = Company::create(['name' => 'One']);
@@ -80,7 +94,7 @@ class ShortUrlTest extends TestCase
         $this->assertCount(1, $data);
     }
 
-    public function test_member_index_sees_not_created_by_self()
+    public function test_member_sees_only_their_created_short_urls()
     {
         $role = Role::where('name','Member')->first();
         $user = User::factory()->create();
