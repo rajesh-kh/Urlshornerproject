@@ -14,7 +14,7 @@ Follow these steps to set up and run the project locally for development and tes
 ## Clone
 
 ```bash
-git clone <your-repo-url> sembark_project
+git clone https://github.com/rajesh-kh/Urlshornerproject.git sembark_project
 cd sembark_project
 ```
 
